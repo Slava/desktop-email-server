@@ -116,7 +116,7 @@ if (googleTokens) {
       });
 
       if (result.match) {
-        var item = _.extend({ user: userId, title: emailObj.snippet, from: from }, result);
+        var item = _.extend({ user: userId, title: emailObj.snippet, from: from, timeStamp: new Date }, result);
         Notifications.insert(item);
         console.log("FOUND:", email.id, item);
       }
