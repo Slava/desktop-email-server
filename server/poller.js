@@ -157,8 +157,8 @@ if (googleTokens) {
         var fn = new Function('emailObj', '$', '_', plugin);
         try {
           result = fn(emailObj, $, _);
-          buttons.push(_.omit(result, ['match']));
           if (result.match) {
+            buttons.push(_.omit(result, ['match']));
             numMatches++;
           }
         } catch (err) {}
