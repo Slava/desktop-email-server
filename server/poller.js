@@ -1,5 +1,6 @@
 REDIRECT_URL = 'http://localhost:3000/_oauth/google?close';
 
+var url = Npm.require('url');
 var cheerio = Meteor.require('cheerio');
 var Future = Npm.require('fibers/future');
 var Tokens = Package['mongo-livedata'].MongoInternals.defaultRemoteCollectionDriver().open("meteor_accounts_loginServiceConfiguration");
@@ -24,6 +25,10 @@ var convertObj = function (dataObject) {
     "content-available" : 1
   };
   result = _.extend(result, _.omit(dataObject, 'match','user','timeStamp', 'imageUrl'));
+  if (result.title.length > 18)
+    result.title = result.title.substring(0, 15) + "...";
+  if (result.from.indexOf("<") !== -1)
+    result.from = result.from.split("<")[0].replace(/"/g, '').trim();
   return result;
 };
 
@@ -36,8 +41,8 @@ var push = function(dataObject) {
  data: {"where": {"deviceType": "ios"},
          "data": converted}},
  function (err, result) {
-   if (!err) console.log('push success');
-   else console.log('push failed', err.stack);
+   if (!err) console.log('push success', JSON.stringify(converted));
+   else console.log('push failed', err.stack, JSON.stringify(converted));
    //console.log(result);
  });
 };
@@ -158,6 +163,10 @@ if (googleTokens) {
         try {
           result = fn(emailObj, $, _);
           if (result.match) {
+            try {
+              if (result.link.indexOf(result.buttonText) !== -1)
+                result.buttonText = 'Goto ' + url.parse(result.link).host;
+            } catch (err) {}
             buttons.push(_.omit(result, ['match']));
             numMatches++;
           }
