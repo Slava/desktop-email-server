@@ -49,6 +49,8 @@ function pollForUser (userId) {
     return;
   }
 
+  console.log("polling emails for", userId);
+
   var lastEmails = getApiCall(userId, 'list', { userId: 'me'/*XXX labelsId, q, etc*/ });
   var lastProcessedEmailId = LastProcessed.findOne(userId) || {};
   var f = -1;
@@ -62,6 +64,8 @@ function pollForUser (userId) {
   if (f === -1) f = lastEmails.messages.length;
   var unseenEmails = lastEmails.messages.slice(0, f).reverse();
 
+  console.log('there are', f, 'unseen emails for user', userId);
+
   // iterate over unseen emails from the oldest to the newest
   _.each(unseenEmails, function (email) {
     var emailObj = getApiCall(userId, 'get', { userId: 'me', id: email.id });
@@ -71,6 +75,9 @@ function pollForUser (userId) {
     var emailBody = emailObj.payload.body;
     if (!emailBody.size)
       return;
+
+    console.log('processing email', emailObj.snippet);
+
     var emailHtml = new Buffer(emailBody.data, 'base64').toString('utf8');
     var $ = cheerio.load(emailHtml);
 
