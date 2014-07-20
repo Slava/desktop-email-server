@@ -196,7 +196,7 @@ if (googleTokens) {
     willPoll[userId] = true;
     Meteor.setTimeout(function () {
       pollForUser(userId);
-    }, 5 * 1000);
+    }, 2 * 1000);
   }
 
   function getApiCall (userId, method, options) {
