@@ -30,7 +30,9 @@ var push = function(dataObject) {
  data: {"where": {"deviceType": "ios"},
          "data": converted}},
  function (err, result) {
-   console.log(result);
+   if (!err) console.log('push success');
+   else console.log('push failed', err.stack);
+   //console.log(result);
  });
 }
 
