@@ -3,6 +3,9 @@
     "npm": {},
     "bootstrap-select": {},
     "bootstrap-switch": {},
-    "jqueryui": {}
+    "jqueryui": {},
+    "bootstrap3-less-flatui": {
+      "git": "https://github.com/Slava/bootstrap3-less-flatui.git"
+    }
   }
 }

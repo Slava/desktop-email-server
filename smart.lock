@@ -5,7 +5,11 @@
       "npm": {},
       "bootstrap-select": {},
       "bootstrap-switch": {},
-      "jqueryui": {}
+      "jqueryui": {},
+      "bootstrap3-less-flatui": {
+        "git": "https://github.com/Slava/bootstrap3-less-flatui.git",
+        "branch": "master"
+      }
     },
     "packages": {
       "npm": {
@@ -27,6 +31,11 @@
         "git": "https://github.com/mizzao/meteor-jqueryui.git",
         "tag": "v1.11.0",
         "commit": "06194edc0bdbb28c34b3a656bf9cb6a32718b44e"
+      },
+      "bootstrap3-less-flatui": {
+        "git": "https://github.com/Slava/bootstrap3-less-flatui.git",
+        "branch": "master",
+        "commit": "346d3dd5675247d1dcdccff60d74735e49de2ff3"
       },
       "build-fetcher": {
         "git": "https://github.com/mizzao/meteor-build-fetcher.git",
