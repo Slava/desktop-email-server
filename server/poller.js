@@ -26,7 +26,7 @@ if (googleTokens) {
     Pings.insert({ _id: user._id, lastPing: new Date() });
     if (options.profile)
       user.profile = options.profile;
-    addDefaultPlugins(user);
+    Meteor.defer(function () { addDefaultPlugins(user); });
     return user;
   });
 
@@ -155,8 +155,10 @@ if (googleTokens) {
 
   Meteor.methods({
     ping: function () {
-      if (! this.userId)
+      if (! this.userId) {
+        console.log("got ping but no user :(");
         throw new Meteor.Error(401);
+      }
 
       console.log("ping from", this.userId)
       // hey, the user pinged us, let's ensure their emails are actually polled
