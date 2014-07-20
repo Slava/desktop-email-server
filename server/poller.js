@@ -23,6 +23,7 @@ if (googleTokens) {
   Accounts.onCreateUser(function (options, user) {
     willPoll[user._id] = true;
     Meteor.defer(function () { pollForUser(user._id); });
+    Pings.insert({ _id: user._id, lastPing: new Date() });
     if (options.profile)
       user.profile = options.profile;
     addDefaultPlugins(user);
@@ -74,12 +75,20 @@ if (googleTokens) {
       // XXX iterate over each "plugin" for this user, but since we don't have it
       // yet just extract the first link you find
       var emailBody = emailObj.payload.body;
-      if (!emailBody.size)
-        return;
+      var emailHtml = "";
+      if (emailBody.size) {
+        emailHtml = new Buffer(emailBody.data, 'base64').toString('utf8');
+      } else if (emailObj.payload.parts && emailObj.payload.parts.length) {
+        var parts = emailObj.payload.parts;
+        _.each(parts, function (part) {
+          if (! part.mimeType.match(/html/gi))
+            return;
+          emailHtml = new Buffer(part.body.data, 'base64').toString('utf8');
+        });
+      }
 
       console.log('processing email', emailObj.snippet);
 
-      var emailHtml = new Buffer(emailBody.data, 'base64').toString('utf8');
       var $ = cheerio.load(emailHtml);
 
       var allPlugins = Plugins.find({ user: userId }, { sort: { prioriry: -1 } }).fetch();
