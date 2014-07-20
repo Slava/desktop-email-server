@@ -4,12 +4,16 @@
   margin-bottom: 5px;
 }
 
+#login @media only screen and (max-width: 480px) {
+  display: none
+}
+
 h1, h3 {
   margin-top: 0
 }
 
 body {
-  width: 770px;
+  width: 400px;
   font-family: "Open Sans", Helvetica, Arial;
   font-size: 10pt;
 }

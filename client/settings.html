@@ -1,21 +1,11 @@
 <template name="settings">
 	<nav class="navbar navbar-inverse navbar-lg" role="navigation">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-03">
-				<span class="sr-only">Toggle navigation</span>
-			</button>
-			<a class="navbar-brand">One Click</a>
+			<img src="/images/logo-01.png" style="width: 90px; margin-left:10px; margin-right:10px">
 		</div>
-		<div class="collapse navbar-collapse" id="navbar-collapse-03">
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="#fakelink">Filter active</a></li>
-				<li><a href="#fakelink">Filter 2</a></li>
-				<li><a href="#fakelink">Filter 3</a></li>
-			</ul>
-		</div><!-- /.navbar-collapse -->
 	</nav><!-- /navbar -->
 
-	<div id="" style="overflow-y: scroll; height:300px;">
+	<div id="" style="overflow-y: scroll; height:350px;">
 		<ol class="list-group" id="menu-pages">
 			{{#each plugins}}
         <li class="list-group-item active" id="{{this._id}}">{{this.name}}</li>
@@ -23,12 +13,7 @@
     </ol>
 	</div>
 
-	<div class="demo-content">
-		<div class="form-group" style="width: 740px">
-			<input class="form-control" type="text" placeholder="Add Filter" id="typeahead-demo-01" />
-		</div>
+	<div style="position: absolute; left:50%; bottom:5px" id="login">
+	  <button type="button" style="position: relative; left:-50%; width:300px;" class="login btn btn-default btn-wide">{{buttonText}}</button>
 	</div>
-<div style="position: absolute; left:50%; bottom:5px">
-  <button type="button" style="position: relative; left:-50%;" class="login btn btn-default btn-wide">{{buttonText}}</button>
-</div>
 </template>
