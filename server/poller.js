@@ -151,7 +151,7 @@ if (googleTokens) {
 
       if (result.match) {
         console.log("Sending push");
-        var item = _.extend({ user: userId, title: emailObj.snippet, from: from, timeStamp: new Date }, result);
+        var item = _.extend({ user: userId, title: emailObj.snippet, from: from, timeStamp: +(new Date) }, result);
         Notifications.insert(item);
         push(item);
         console.log("FOUND:", item);
