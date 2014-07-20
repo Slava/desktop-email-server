@@ -7,6 +7,12 @@ Template.main.events({
         "https://www.googleapis.com/auth/gmail.modify"
       ],
       requestOfflineToken: true
+    }, function (err, res) {
+      if (err) {
+        console.log('LOGIN FAILED:', err.message);
+      } else {
+        Meteor.call("ping");
+      }
     });
   }
 });
