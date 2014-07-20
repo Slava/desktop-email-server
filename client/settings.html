@@ -15,11 +15,13 @@
 		</div><!-- /.navbar-collapse -->
 	</nav><!-- /navbar -->
 
-	<ol class="list-group" id="menu-pages">
-		{{#each plugins}}
-      <li class="list-group-item active" id="{{this._id}}">{{this.name}}</li>
-    {{/each}}
-  </ol>
+	<div id="" style="overflow-y: scroll; height:300px;">
+		<ol class="list-group" id="menu-pages">
+			{{#each plugins}}
+	      <li class="list-group-item active" id="{{this._id}}">{{this.name}}</li>
+	    {{/each}}
+	  </ol>
+	</div>
 
 	<div class="demo-content">
 		<div class="form-group" style="width: 740px">
