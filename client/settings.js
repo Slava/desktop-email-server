@@ -1,49 +1,35 @@
+SimpleRationalRanks = {
+  beforeFirst: function (firstRank) { return firstRank + 100; },
+  between: function (beforeRank, afterRank) { return (beforeRank + afterRank) / 2; },
+  afterLast: function (lastRank) { return lastRank - 100; }
+};
+
 Template.settings.plugins = function () {
 	return Plugins.find({}, { sort: { priority: -1 }});
 };
 
-$(function () {
-  $("ol.example").sortable();
-});
+Template.settings.rendered = function () {
+	$("#menu-pages").sortable({
+		stop: function (event, ui) { // fired when an item is dropped
+      var el = ui.item.get(0), before = ui.item.prev().get(0), after = ui.item.next().get(0);
 
-$(document).ready(function(){
-		$('#menu-pages').sortable();
-});
+      var newPriority;
+      if (!before) { // moving to the top of the list
+        newPriority = SimpleRationalRanks.beforeFirst(UI.getElementData(after).priority);
 
-var adjustment;
-$("ol.simple_with_animation").sortable({
-  group: 'simple_with_animation',
-  pullPlaceholder: false,
-  // animation on drop
-  onDrop: function  (item, targetContainer, _super) {
-    var clonedItem = $('<li/>').css({height: 0});
-    item.before(clonedItem);
-    clonedItem.animate({'height': item.height()});
+      } else if (!after) { // moving to the bottom of the list
+        newPriority = SimpleRationalRanks.afterLast(UI.getElementData(before).priority);
 
-    item.animate(clonedItem.position(), function  () {
-      clonedItem.detach();
-      _super(item);
-    });
-  },
+      } else {
+        newPriority = SimpleRationalRanks.between(
+          UI.getElementData(before).priority,
+          UI.getElementData(after).priority);
+      }
+      console.log(newPriority);
+      Plugins.update(UI.getElementData(el)._id, {$set: {priority: newPriority}});
+    }
 
-  // set item relative to cursor position
-  onDragStart: function ($item, container, _super) {
-    var offset = $item.offset(),
-    pointer = container.rootGroup.pointer;
-
-    adjustment = {
-      left: pointer.left - offset.left,
-      top: pointer.top - offset.top
-    };
-
-    _super($item, container);
-  },
-  onDrag: function ($item, position) {
-    $item.css({
-      left: position.left - adjustment.left,
-      top: position.top - adjustment.top
-    });
-  }
-});
+	});
+};
 
 
