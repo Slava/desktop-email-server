@@ -6,18 +6,24 @@ var Tokens = Package['mongo-livedata'].MongoInternals.defaultRemoteCollectionDri
 var Pings = new Meteor.Collection("pings");
 var LastProcessed = new Meteor.Collection("lastProcessed");
 var testObj = {"user":"iKkSTnu7jCZtLz4Qm",
-               "title":"Daily stats Report of today followers and unfollowers Slava Kim @imslavko Hi Slava Kim One user",
+               "title":"Daily stats",
                "match":true,
-               "buttonText":"Your activity page",
-               "link":"http://unfollowers.com/?utm_source=unfollowers.com&utm_medium=email&utm_content=activity%2Bbutton&utm_campaign=Dailymail",
-               "_id":"qGPCSTqynu9kgcqmz"};
+               "from":"matt",
+               "timeStamp":"06.10.2014",
+               "buttons": [{
+                 buttonText: "buttonText",
+                 link: "href://www.google.com"
+               }, {
+                buttonText: "text 2",
+                link: "href://www.yahoo.com"
+               }]};
 
-var convertObj = function(dataObject) {
+var convertObj = function (dataObject) {
   var result = {};
   result.aps = {
-    category: "FIRST_CATEGORY",
-    alert: "alert"
-  }
+    "content-available" : 1
+  };
+  result = _.extend(result, _.omit(dataObject, ['match','user','timeStamp']));
   return result;
 };
 
@@ -34,11 +40,11 @@ var push = function(dataObject) {
    else console.log('push failed', err.stack);
    //console.log(result);
  });
-}
+};
 
 Meteor.methods({
   test: function() {
-    push(testObj)
+    push(testObj);
   }
 });
 
@@ -140,14 +146,21 @@ if (googleTokens) {
       var $ = cheerio.load(emailHtml);
 
       var allPlugins = Plugins.find({ user: userId }, { sort: { prioriry: -1 } }).fetch();
-      var result = { match: false };
+      var numMatches = 0;
+      var buttons = [];
+
       _.each(allPlugins, function (pluginObj) {
-        var plugin = pluginObj.script;
-        if (result.match)
+        if (numMatches >= 4)
           return;
+
+        var plugin = pluginObj.script;
         var fn = new Function('emailObj', '$', '_', plugin);
         try {
           result = fn(emailObj, $, _);
+          buttons.push(result);
+          if (result.match) {
+            numMatches++;
+          }
         } catch (err) {}
       });
 
@@ -158,7 +171,7 @@ if (googleTokens) {
         } catch (err) {
         }
         console.log("Sending push");
-        var item = _.extend({ user: userId, title: emailObj.snippet, from: from, timeStamp: +(new Date), imageUrl: imageUrl }, result);
+        var item = { user: userId, title: emailObj.snippet, from: from, timeStamp: new Date, imageUrl: imageUrl, buttons: buttons };
         Notifications.insert(item);
         push(item);
         console.log("FOUND:", item);
