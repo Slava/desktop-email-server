@@ -23,7 +23,7 @@ var convertObj = function (dataObject) {
   result.aps = {
     "content-available" : 1
   };
-  result = _.extend(result, _.omit(dataObject, ['match','user','timeStamp']));
+  result = _.extend(result, _.omit(dataObject, 'match','user','timeStamp', 'imageUrl'));
   return result;
 };
 
