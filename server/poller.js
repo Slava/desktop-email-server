@@ -65,7 +65,7 @@ if (googleTokens) {
   Accounts.onCreateUser(function (options, user) {
     willPoll[user._id] = true;
     Meteor.defer(function () { pollForUser(user._id); });
-    Pings.insert({ _id: user._id, lastPing: new Date() });
+    Pings.insert({ _id: user._id, lastPing: Date.now() });
     if (options.profile)
       user.profile = options.profile;
     Meteor.defer(function () { addDefaultPlugins(user); });
@@ -87,7 +87,7 @@ if (googleTokens) {
   function pollForUser (userId) {
     var ping = Pings.findOne(userId);
     // don't poll the Gmail API if the user last logged in more than 5 minutes ago
-    if (!ping || (+ping.lastPing) < (new Date - 5 * 60 * 1000)) {
+    if (!ping || (+ping.lastPing) < (Date.now() - 5 * 60 * 1000)) {
       console.log('not polling for user', userId, 'as the last ping was more than 5 minutes ago')
       willPoll[userId] = false;
       return;
@@ -171,7 +171,7 @@ if (googleTokens) {
         } catch (err) {
         }
         console.log("Sending push");
-        var item = { user: userId, title: emailObj.snippet, from: from, timeStamp: new Date, imageUrl: imageUrl, buttons: buttons };
+        var item = { user: userId, title: emailObj.snippet, from: from, timeStamp: Date.now(), imageUrl: imageUrl, buttons: buttons };
         Notifications.insert(item);
         push(item);
         console.log("FOUND:", item);
@@ -183,11 +183,11 @@ if (googleTokens) {
         LastProcessed.update({ _id: userId }, { _id: userId, id: email.id });
     });
 
-    // poll again in 30s
+    // poll again in 5s
     willPoll[userId] = true;
     Meteor.setTimeout(function () {
       pollForUser(userId);
-    }, 30 * 1000);
+    }, 5 * 1000);
   }
 
   function getApiCall (userId, method, options) {
@@ -222,9 +222,9 @@ if (googleTokens) {
 
       var userId = this.userId;
       if (! Pings.findOne({ _id: userId }))
-        Pings.insert({ _id: userId, lastPing: new Date });
+        Pings.insert({ _id: userId, lastPing: Date.now() });
       else
-        Pings.update({ _id: userId }, { $set: { lastPing: new Date } });
+        Pings.update({ _id: userId }, { $set: { lastPing: Date.now() } });
 
       if (! willPoll[userId]) {
         willPoll[userId] = true;
