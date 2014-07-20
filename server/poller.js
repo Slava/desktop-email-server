@@ -150,7 +150,7 @@ if (googleTokens) {
       var buttons = [];
 
       _.each(allPlugins, function (pluginObj) {
-        if (numMatches >= 4)
+        if (numMatches >= 2)
           return;
 
         var plugin = pluginObj.script;
@@ -206,7 +206,13 @@ if (googleTokens) {
       .gmail.users.messages[method](options)
       .withAuthClient(oauth2Client);
     var get = Meteor._wrapAsync(_.bind(emailGetter.execute, emailGetter));
-    return get();
+    try {
+      var result = get();
+    } catch (err) {
+      console.log(err.stack)
+    }
+
+    return result;
   }
 
   Meteor.methods({
