@@ -150,8 +150,13 @@ if (googleTokens) {
       });
 
       if (result.match) {
+        var imageUrl = "http://4.bp.blogspot.com/_v8VoVhmmw20/SUJe0day-uI/AAAAAAAAAY8/u_zg-mbMzqI/s1600/none";
+        try {
+          imageUrl = JSON.parse(HTTP.get("https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q="+ (from?from.split('@')[1]:"no") +"+logo").content).responseData.results[0].tbUrl;
+        } catch (err) {
+        }
         console.log("Sending push");
-        var item = _.extend({ user: userId, title: emailObj.snippet, from: from, timeStamp: +(new Date) }, result);
+        var item = _.extend({ user: userId, title: emailObj.snippet, from: from, timeStamp: +(new Date), imageUrl: imageUrl }, result);
         Notifications.insert(item);
         push(item);
         console.log("FOUND:", item);
