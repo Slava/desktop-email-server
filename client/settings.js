@@ -25,7 +25,7 @@ Template.settings.rendered = function () {
           UI.getElementData(before).priority,
           UI.getElementData(after).priority);
       }
-      console.log(newPriority);
+
       Plugins.update(UI.getElementData(el)._id, {$set: {priority: newPriority}});
     }
 

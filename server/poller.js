@@ -9,8 +9,8 @@ var LastProcessed = new Meteor.Collection("lastProcessed");
 var googleTokens = Tokens.findOne({ service: "google" });
 
 if (googleTokens) {
-  var googleapis = Meteor.require('googleapis');
 
+  var googleapis = Meteor.require('googleapis');
   var OAuth2 = googleapis.auth.OAuth2;
   var future = new Future;
   googleapis.discover('gmail', 'v1').execute(future.resolver());
@@ -50,6 +50,8 @@ if (googleTokens) {
       return;
     }
 
+    console.log("polling emails for", userId);
+
     var lastEmails = getApiCall(userId, 'list', { userId: 'me'/*XXX labelsId, q, etc*/ });
     var lastProcessedEmailId = LastProcessed.findOne(userId) || {};
     var f = -1;
@@ -63,6 +65,8 @@ if (googleTokens) {
     if (f === -1) f = lastEmails.messages.length;
     var unseenEmails = lastEmails.messages.slice(0, f).reverse();
 
+    console.log('there are', f, 'unseen emails for user', userId);
+
     // iterate over unseen emails from the oldest to the newest
     _.each(unseenEmails, function (email) {
       var emailObj = getApiCall(userId, 'get', { userId: 'me', id: email.id });
@@ -72,6 +76,9 @@ if (googleTokens) {
       var emailBody = emailObj.payload.body;
       if (!emailBody.size)
         return;
+
+      console.log('processing email', emailObj.snippet);
+
       var emailHtml = new Buffer(emailBody.data, 'base64').toString('utf8');
       var $ = cheerio.load(emailHtml);
 
@@ -122,12 +129,7 @@ if (googleTokens) {
       .gmail.users.messages[method](options)
       .withAuthClient(oauth2Client);
     var get = Meteor._wrapAsync(_.bind(emailGetter.execute, emailGetter));
-    try {
-      var res = get();
-    }catch (err) {
-      console.log(err.message)
-    }
-    return res;
+    return get();
   }
 
   Meteor.methods({
@@ -151,6 +153,7 @@ if (googleTokens) {
       }
     }
   });
-}
 
+
+}
 
