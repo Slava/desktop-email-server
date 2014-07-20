@@ -93,6 +93,12 @@ if (googleTokens) {
         });
       }
 
+      var from = "Anonymous Coward";
+      if (emailObj.payload.headers) {
+        var fromHeader = _.findWhere(emailObj.payload.headers, { name: "From" });
+        if (fromHeader) from = fromHeader.value;
+      }
+
       console.log('processing email', emailObj.snippet);
 
       var $ = cheerio.load(emailHtml);
@@ -110,9 +116,9 @@ if (googleTokens) {
       });
 
       if (result.match) {
-        var item = _.extend({ user: userId, title: emailObj.snippet }, result);
+        var item = _.extend({ user: userId, title: emailObj.snippet, from: from }, result);
         Notifications.insert(item);
-        console.log("FOUND:", item);
+        console.log("FOUND:", email.id, item);
       }
 
       if (! LastProcessed.findOne(userId))
