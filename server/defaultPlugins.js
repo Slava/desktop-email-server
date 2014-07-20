@@ -10,8 +10,10 @@ var defaultPlugins = [
   'go.js',
   'no.js',
   'yes.js',
+  'token-in-url-or-verify.js',
   'your.js',
-  'unsubscribe.js'
+  'unsubscribe.js',
+  'first-link.js'
 ];
 
 // for every new user setup the default plugins

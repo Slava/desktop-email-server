@@ -54,6 +54,12 @@ if (googleTokens) {
     console.log("polling emails for", userId);
 
     var lastEmails = getApiCall(userId, 'list', { userId: 'me'/*XXX labelsId, q, etc*/ });
+
+
+    // weirdly sometimes we can get no data
+    if (!lastEmails || !lastEmails.messages)
+      return;
+
     var lastProcessedEmailId = LastProcessed.findOne(userId) || {};
     var f = -1;
 
