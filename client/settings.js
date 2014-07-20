@@ -32,4 +32,3 @@ Template.settings.rendered = function () {
 	});
 };
 
-

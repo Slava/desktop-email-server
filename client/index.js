@@ -1,22 +1,3 @@
-Template.main.events({
-  'click .login': function () {
-    Meteor.loginWithGoogle({
-      requestPermissions: ['email',
-        "https://mail.google.com/",
-        "https://www.googleapis.com/auth/gmail.readonly",
-        "https://www.googleapis.com/auth/gmail.modify"
-      ],
-      requestOfflineToken: true
-    }, function (err, res) {
-      if (err) {
-        console.log('LOGIN FAILED:', err.message);
-      } else {
-        Meteor.call("ping");
-      }
-    });
-  }
-});
-
 // every 4 minutes, notify server that we still care about email updates
 Meteor.setInterval(function () {
   Meteor.call("ping");
