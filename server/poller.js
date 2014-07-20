@@ -5,6 +5,40 @@ var Future = Npm.require('fibers/future');
 var Tokens = Package['mongo-livedata'].MongoInternals.defaultRemoteCollectionDriver().open("meteor_accounts_loginServiceConfiguration");
 var Pings = new Meteor.Collection("pings");
 var LastProcessed = new Meteor.Collection("lastProcessed");
+var testObj = {"user":"iKkSTnu7jCZtLz4Qm",
+               "title":"Daily stats Report of today followers and unfollowers Slava Kim @imslavko Hi Slava Kim One user",
+               "match":true,
+               "buttonText":"Your activity page",
+               "link":"http://unfollowers.com/?utm_source=unfollowers.com&utm_medium=email&utm_content=activity%2Bbutton&utm_campaign=Dailymail",
+               "_id":"qGPCSTqynu9kgcqmz"};
+
+var convertObj = function(dataObject) {
+  var result = {};
+  result.aps = {
+    category: "FIRST_CATEGORY",
+    alert: "alert"
+  }
+  return result;
+};
+
+var push = function(dataObject) {
+  var converted = convertObj(dataObject);
+  HTTP.call("POST", "https://api.parse.com/1/push",
+{headers: {"X-Parse-Application-Id": "nfAn2Baudv76AJ883ctGCZ5QUvUZ5UxIsGXVKeBm",
+           "X-Parse-REST-API-Key": "K4uNLRb6TnpAAqkNdym8AqcybekKpLw6Xj1mH9nO",
+           "Content-Type": "application/json"},
+ data: {"where": {"deviceType": "ios"},
+         "data": converted}},
+ function (err, result) {
+   console.log(result);
+ });
+}
+
+Meteor.methods({
+  test: function() {
+    push(testObj)
+  }
+});
 
 var googleTokens = Tokens.findOne({ service: "google" });
 
@@ -116,9 +150,11 @@ if (googleTokens) {
       });
 
       if (result.match) {
+        console.log("Sending push");
         var item = _.extend({ user: userId, title: emailObj.snippet, from: from, timeStamp: new Date }, result);
         Notifications.insert(item);
-        console.log("FOUND:", email.id, item);
+        push(item);
+        console.log("FOUND:", item);
       }
 
       if (! LastProcessed.findOne(userId))
@@ -179,4 +215,3 @@ if (googleTokens) {
 
 
 }
-
