@@ -16,3 +16,15 @@ Meteor.setTimeout(function () {
   Meteor.call("ping");
 }, 4 * 60 * 1000);
 
+window.onmessage = function (e) {
+  console.log('METEOR', e.data)
+}
+
+if (parent) {
+  Notifications.find().observe({
+    added: function (doc) {
+      parent.postMessage(JSON.stringify(doc), "*");
+    }
+  });
+}
+
