@@ -157,7 +157,7 @@ if (googleTokens) {
         var fn = new Function('emailObj', '$', '_', plugin);
         try {
           result = fn(emailObj, $, _);
-          buttons.push(result);
+          buttons.push(_.omit(result, ['match']));
           if (result.match) {
             numMatches++;
           }
