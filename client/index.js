@@ -12,9 +12,12 @@ Template.main.events({
 });
 
 // every 4 minutes, notify server that we still care about email updates
-Meteor.setTimeout(function () {
+Meteor.setInterval(function () {
   Meteor.call("ping");
 }, 4 * 60 * 1000);
+Meteor.startup(function () {
+  Meteor.call("ping");
+});
 
 window.onmessage = function (e) {
   console.log('METEOR', e.data)
