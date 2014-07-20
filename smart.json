@@ -1,5 +1,8 @@
 {
   "packages": {
-    "npm": {}
+    "npm": {},
+    "bootstrap-select": {},
+    "bootstrap-switch": {},
+    "jqueryui": {}
   }
 }

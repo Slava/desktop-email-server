@@ -2,13 +2,36 @@
   "meteor": {},
   "dependencies": {
     "basePackages": {
-      "npm": {}
+      "npm": {},
+      "bootstrap-select": {},
+      "bootstrap-switch": {},
+      "jqueryui": {}
     },
     "packages": {
       "npm": {
         "git": "https://github.com/arunoda/meteor-npm.git",
         "tag": "v0.2.6",
         "commit": "177ab6118de5bf8cffb19481343d5762ff7a2aaf"
+      },
+      "bootstrap-select": {
+        "git": "https://github.com/amrali/bootstrap-select-meteor.git",
+        "tag": "v1.5.4",
+        "commit": "de99107c031dad11327b7739e9f7b389a229c63f"
+      },
+      "bootstrap-switch": {
+        "git": "https://github.com/TimHeckel/meteor-bootstrap-switch.git",
+        "tag": "v0.1.3",
+        "commit": "698434e0346ae187acd2aa08b723cfe017fa0311"
+      },
+      "jqueryui": {
+        "git": "https://github.com/mizzao/meteor-jqueryui.git",
+        "tag": "v1.11.0",
+        "commit": "06194edc0bdbb28c34b3a656bf9cb6a32718b44e"
+      },
+      "build-fetcher": {
+        "git": "https://github.com/mizzao/meteor-build-fetcher.git",
+        "tag": "v0.2.0",
+        "commit": "5202ca83277860d798c6ff2ef1d8fe1bce007d0f"
       }
     }
   }

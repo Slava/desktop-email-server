@@ -1,0 +1,29 @@
+<template name="settings">
+	<nav class="navbar navbar-default navbar-lg" role="navigation">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-03">
+				<span class="sr-only">Toggle navigation</span>
+			</button>
+			<a class="navbar-brand" href="#">Awesome App</a>
+		</div>
+		<div class="collapse navbar-collapse" id="navbar-collapse-03">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#fakelink">Filter active</a></li>
+				<li><a href="#fakelink">Filter 2</a></li>
+				<li><a href="#fakelink">Filter 3</a></li>
+			</ul>
+		</div><!-- /.navbar-collapse -->
+	</nav><!-- /navbar -->
+
+	<ol class="list-group" id="menu-pages">
+		{{#each plugins}}
+      <li class="list-group-item active" id="{{this._id}}">{{this.name}}</li>
+    {{/each}}
+  </ol>
+
+	<div class="demo-content">
+		<div class="form-group" style="width: 740px">
+			<input class="form-control" type="text" placeholder="Add Filter" id="typeahead-demo-01" />
+		</div>
+	</div>
+</template>
